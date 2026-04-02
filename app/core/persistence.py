@@ -1,3 +1,21 @@
+"""
+Persistence.
+
+Joblib save/load with path resolution.
+
+Storage layout:
+storage/                
+    <series_id>/             #one directory per series_id
+        manifest.json        #version list + metadata / version
+        v1/                  #one directory / version
+            model.joblib     #serialized object
+        v2/
+        ...
+
+Joblib is preferred over pickle for numpy-heavy objects:
+it uses memory-mapped files and compresses arrays efficiently.
+"""
+
 import json
 import os
 from pathlib import Path
