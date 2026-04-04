@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import train, predict
+from app.api.routes import train, predict, health
 from app.core.executor import executor
 
 
@@ -32,6 +32,7 @@ def create_app() -> FastAPI:
     # Routers
     app.include_router(train.router)
     app.include_router(predict.router)
+    app.include_router(health.router)
 
     return app
 
