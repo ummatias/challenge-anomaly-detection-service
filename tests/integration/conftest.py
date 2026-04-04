@@ -28,8 +28,18 @@ def isolated_storage(tmp_path, monkeypatch):
 
 @pytest.fixture
 def client(isolated_storage):
+    """
+    Using dependency overrides to inject a new instance of AnomalyService for each test.
+    This ensures that the in-memory locks and latency trackers are reset for each test.
+    """
     from app.main import app
-    return TestClient(app)
+    from app.services.anomaly_service import get_service, AnomalyService
+
+    new_service = AnomalyService()
+
+    app.dependency_overrides[get_service] = lambda: new_service
+    yield TestClient(app)
+    app.dependency_overrides.clear()
 
 
 @pytest.fixture

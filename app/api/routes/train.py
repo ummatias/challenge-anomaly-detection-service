@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, HTTPException, Path, Depends
 from app.schemas.training import TrainData, TrainResponse
-from app.services.anomaly_service import anomaly_service
+from app.services.anomaly_service import AnomalyService, get_service
 from app.core.validation import ValidationError
 
 router = APIRouter(tags=["Training"])
@@ -10,6 +10,7 @@ router = APIRouter(tags=["Training"])
 async def fit(
     series_id: str = Path(..., description="Unique identifier for the time series"),
     body: TrainData = ...,
+    service: AnomalyService = Depends(get_service),
 ) -> TrainResponse:
     """
     Train (or retrain) an anomaly detection model for a series_id.
@@ -18,6 +19,6 @@ async def fit(
     The training process is thread-safe, allowing concurrent training and inference on the same series_id. 
     """
     try:
-        return await anomaly_service.train(series_id, body)
+        return await service.train(series_id, body)
     except ValidationError as e:
         raise HTTPException(status_code=422, detail={"rule": e.rule, "detail": e.detail})

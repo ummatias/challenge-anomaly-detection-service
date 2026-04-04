@@ -127,3 +127,11 @@ class AnomalyService:
 
 # Singleton instance of the service to be used across the app
 anomaly_service = AnomalyService()
+
+def get_service() -> AnomalyService:
+    """
+        Factory function to get the singleton service instance
+        - Production: always returns the same instance
+        - Testing: can be overridden to return a fresh instance for isolation
+    """
+    return anomaly_service
