@@ -8,11 +8,19 @@ Thread-safe for reads; the service layer owns write.
 """
 
 from collections import deque
+from prometheus_client import Gauge
 import numpy as np
 
 
+"""
+    Prometheus metric to track how many series have trained models, set
+    at startup and after training new models.
+"""
+series_trained_gauge = Gauge(
+    "anomaly_series_trained_total",
+    "Total number of series with trained models",
+)
 class LatencyTracker:
-    
 
     def __init__(self, maxlen: int = 1000) -> None:
         self._samples: deque[float] = deque(maxlen=maxlen)

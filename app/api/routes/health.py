@@ -11,5 +11,8 @@ async def healthcheck(service: AnomalyService = Depends(get_service)) -> HealthC
     Returns system metrics:
       - Number of trained series in storage
       - Avg and p95 latency for training and inference (last 1000 requests)
+      - Load metrics is requested in challenge specification, but not appear on 
+        openapi spec, so not implemented here. Grafana can be used to monitor load 
+        metrics directly from Prometheus.
     """
     return await service.health()

@@ -23,6 +23,7 @@ from app.core import persistence, versioning, validation
 from app.core.executor import executor
 from app.core.metrics import LatencyTracker
 from app.core.model import AnomalyDetectionModel
+from app.core.metrics import series_trained_gauge
 from app.schemas.training import TrainData, TrainResponse
 from app.schemas.prediction import PredictResponse
 from app.schemas.health import HealthCheckResponse, LatencyMetrics
@@ -66,6 +67,9 @@ class AnomalyService:
             persistence.save_model(series_id, version, params)
             updated_manifest = versioning.append_version(manifest, version, params)
             persistence.save_manifest(series_id, updated_manifest)
+
+            # Update Prometheus gauge with the current number of trained series
+            series_trained_gauge.set(len(persistence.list_series()))
 
         return TrainResponse(
             series_id=series_id,
