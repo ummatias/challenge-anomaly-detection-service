@@ -5,10 +5,11 @@ Joblib save/load with path resolution.
 
 Storage layout:
 storage/                
-    <series_id>/             #one directory per series_id
-        manifest.json        #version list + metadata / version
-        v1/                  #one directory / version
-            model.joblib     #serialized object
+    <series_id>/                # one directory per series_id
+        manifest.json           # version list + metadata / version
+        v1/                     # one directory / version
+            model.joblib        # serialized object
+            training_data.json  # raw training data used for plotting and validation
         v2/
         ...
 
@@ -61,6 +62,23 @@ def load_model(series_id: str, version: str) -> ModelParams:
             f"Train the model first via POST /fit/{series_id}."
         )
     return joblib.load(path)
+
+def save_training_data(series_id: str, version: str, timestamps: list[int], values: list[float]) -> None:
+    vdir = _version_dir(series_id, version)
+    vdir.mkdir(parents=True, exist_ok=True)
+    with open(vdir / "training_data.json", "w") as f:
+        json.dump({"timestamps": timestamps, "values": values}, f)
+
+
+def load_training_data(series_id: str, version: str) -> dict:
+    path = _version_dir(series_id, version) / "training_data.json"
+    if not path.exists():
+        raise FileNotFoundError(
+            f"No training data found for series='{series_id}' version='{version}'. "
+            f"This version may have been trained before plot support was added."
+        )
+    with open(path) as f:
+        return json.load(f)
 
 def series_exists(series_id: str) -> bool:
     return _manifest_path(series_id).exists()

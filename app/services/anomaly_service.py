@@ -30,7 +30,7 @@ from app.schemas.health import HealthCheckResponse, LatencyMetrics
 
 class AnomalyService:
     def __init__(self) -> None:
-        # Create a lock for each series in first access
+        # Create a lock for each series
         self._locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
         self._train_latency = LatencyTracker()
         self._infer_latency = LatencyTracker()
@@ -65,6 +65,7 @@ class AnomalyService:
             manifest = persistence.load_manifest(series_id)
             version = versioning.next_version(manifest)
             persistence.save_model(series_id, version, params)
+            persistence.save_training_data(series_id, version, data.timestamps, data.values)
             updated_manifest = versioning.append_version(manifest, version, params)
             persistence.save_manifest(series_id, updated_manifest)
 
@@ -121,7 +122,6 @@ class AnomalyService:
 
 
     async def health(self) -> HealthCheckResponse:
-        # Health check with latency metrics and number of trained series
         series = persistence.list_series()
         return HealthCheckResponse(
             series_trained=len(series),

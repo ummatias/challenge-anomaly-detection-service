@@ -3,7 +3,7 @@ from app.core import persistence
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
-from app.api.routes import train, predict, health
+from app.api.routes import train, predict, health, plot
 from app.core.executor import executor
 from app.core.metrics import series_trained_gauge
 
@@ -46,10 +46,10 @@ def create_app() -> FastAPI:
         tags=["monitoring"],
     )
     
-    # Routers
     app.include_router(train.router)
     app.include_router(predict.router)
     app.include_router(health.router)
+    app.include_router(plot.router)
 
     return app
 
