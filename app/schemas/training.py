@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field, model_validator
 class TrainData(BaseModel):
     timestamps: list[int] = Field(
         ...,
-        description="Unix timestamps in seconds, strictly increasing",
+        description="Timestamp values should be in the unix timestamp format",
     )
     values: list[float] = Field(
         ...,

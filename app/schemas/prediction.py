@@ -2,7 +2,7 @@
 Prediction-related Pydantic schemas
 
 Decisions:
-  - PredictData.timestamp: string or int (accept both), normalized to int internally
+  - PredictData.timestamp: string in unix timestamp format for better readability in API requests
   - PredictResponse.model_version: string ("v1", "v2", etc) for better readability in API responses
 """
 
@@ -10,9 +10,9 @@ from pydantic import BaseModel, Field
 
 
 class PredictData(BaseModel):
-    timestamp: str | int = Field(
+    timestamp: str = Field(
         ...,
-        description="Timestamp of the point (string or unix int, both accepted)",
+        description="Timestamp should be in the unix timestamp format",
     )
     value: float
 
