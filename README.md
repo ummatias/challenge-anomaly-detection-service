@@ -148,7 +148,7 @@ curl http://localhost:8000/healthcheck
 ### Plot (optional)
 
 ```http
-GET /plot?series_id=sensor_temp&version=v1
+GET http://localhost:8000/plot?series_id=sensor_temp&version=v1
 ```
 
 Returns an interactive Plotly chart of the training data with the anomaly threshold overlaid. 

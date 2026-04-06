@@ -45,17 +45,18 @@ class PlotService:
         fig.add_scatter(
             x=[t for t, _ in normal],
             y=[v for _, v in normal],
-            mode="markers",
+            mode="lines+markers",
             name="Normal",
-            marker=dict(color="#60a5fa", size=6),
+            line=dict(dash="dot", color="#60a5fa"),
+            marker=dict(size=6),
         )
         fig.add_scatter(
             x=[t for t, _ in anomalies],
             y=[v for _, v in anomalies],
-            mode="markers",
+            mode="lines+markers",
             name="Anomaly",
+            line=dict(dash="dot", color="#f87171"),
             marker=dict(
-                color="#f87171",
                 size=9,
                 symbol="circle-open",
                 line=dict(width=2, color="#f87171"),
