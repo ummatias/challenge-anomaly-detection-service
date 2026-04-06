@@ -4,7 +4,7 @@ WORKDIR /build
 COPY requirements.txt .
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip --quiet && \
-    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+    /opt/venv/bin/pip install --no-cache-dir --require-hashes -r requirements.txt
 
 FROM python:3.12-slim AS runtime
 
