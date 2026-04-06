@@ -3,8 +3,11 @@ Unit tests for versioning logic in app.core.versioning.
 """
 
 from app.core.versioning import (
-    next_version, latest_version, append_version,
-    version_exists, get_version_entry,
+    next_version,
+    latest_version,
+    append_version,
+    version_exists,
+    get_version_entry,
 )
 from app.core.model import ModelParams
 
@@ -53,7 +56,9 @@ class TestAppendVersion:
     def test_does_not_mutate_original(self):
         manifest = {"versions": []}
         append_version(manifest, "v1", make_params())
-        assert len(manifest["versions"]) == 0 # Original manifest should remain unchanged
+        assert (
+            len(manifest["versions"]) == 0
+        )  # Original manifest should remain unchanged
 
     def test_entry_has_required_fields(self):
         manifest = {"versions": []}

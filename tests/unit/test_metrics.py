@@ -24,7 +24,7 @@ class TestLatencyTrackerWithData:
         lt = LatencyTracker()
         for v in [1.0, 2.0, 3.0, 4.0, 5.0]:
             lt.record(v)
-        assert abs(lt.avg() - 3.0) < 0.01 # avg of 1..5 is 3.0
+        assert abs(lt.avg() - 3.0) < 0.01  # avg of 1..5 is 3.0
 
     def test_p95_is_computed(self):
         lt = LatencyTracker()
@@ -44,11 +44,11 @@ class TestLatencyTrackerRollingWindow:
         lt = LatencyTracker(maxlen=5)
         for v in range(100):
             lt.record(float(v))
-        assert lt.avg() > 90.0 # Only the last 5 values should be in the window
+        assert lt.avg() > 90.0  # Only the last 5 values should be in the window
 
     def test_old_values_evicted(self):
         lt = LatencyTracker(maxlen=3)
         for v in [1.0, 2.0, 3.0]:
             lt.record(v)
-        lt.record(100.0) # This should evict 1.0
+        lt.record(100.0)  # This should evict 1.0
         assert abs(lt.avg() - 35.0) < 0.01

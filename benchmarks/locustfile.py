@@ -18,6 +18,7 @@ class AnomalyUser(HttpUser):
     Each user owns one series, traines it on first request,
     then continuously predicts. 95% predict, 5% anomaly injection.
     """
+
     wait_time = between(0.05, 0.2)
 
     def on_start(self):

@@ -34,7 +34,9 @@ class TestHealthCheckSeriesCount:
         r = client.get("/healthcheck")
         assert r.json()["series_trained"] == 1
 
-    def test_series_count_updates_after_multiple_trains(self, client, make_train_payload):
+    def test_series_count_updates_after_multiple_trains(
+        self, client, make_train_payload
+    ):
         client.post("/fit/s1", json=make_train_payload())
         client.post("/fit/s2", json=make_train_payload())
         client.post("/fit/s3", json=make_train_payload())
@@ -71,7 +73,9 @@ class TestHealthCheckLatency:
         # Trained but no predict yet
         assert r.json()["inference_latency_ms"]["avg"] is None
 
-    def test_inference_latency_populated_after_predict(self, client, make_train_payload):
+    def test_inference_latency_populated_after_predict(
+        self, client, make_train_payload
+    ):
         client.post("/fit/s1", json=make_train_payload())
         client.post("/predict/s1", json={"timestamp": "0", "value": 1.0})
         r = client.get("/healthcheck")

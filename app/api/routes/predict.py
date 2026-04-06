@@ -9,13 +9,18 @@ router = APIRouter(tags=["Prediction"])
 @router.post("/predict/{series_id}", response_model=PredictResponse)
 async def predict(
     series_id: str = Path(..., description="Unique identifier for the time series"),
-    version: Optional[str] = Query(None, description="Model version (defaults to latest)"),
+    version: Optional[str] = Query(
+        None, description="Model version (defaults to latest)"
+    ),
     body: PredictData = ...,
     service: AnomalyService = Depends(get_service),
 ) -> PredictResponse:
     """
     Predict if a value is an anomaly for a given series_id using a trained model.
     If version is not specified, the latest trained model for that series_id will be used.
+
+    'timestamp' is accepted in the request body per API contract but not used in the current model:
+    z-score based anomaly detection is purely value-based.
     """
     try:
         return await service.predict(series_id, body.value, version)

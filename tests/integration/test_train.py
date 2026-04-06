@@ -44,7 +44,9 @@ class TestTrainVersioning:
 
     def test_retrain_one_series_does_not_affect_other(self, client, make_train_payload):
         client.post("/fit/sensor_A", json=make_train_payload())
-        client.post("/fit/sensor_A", json=make_train_payload())  # retrain sensor_A to v2
+        client.post(
+            "/fit/sensor_A", json=make_train_payload()
+        )  # retrain sensor_A to v2
         r = client.post("/fit/sensor_B", json=make_train_payload())
         assert r.json()["version"] == "v1"  # sensor_B should still be at v1
 
@@ -79,7 +81,7 @@ class TestTrainPreflight:
 
     def test_non_monotonic_timestamps_returns_422(self, client):
         payload = {
-            "timestamps": list(range(30)) + [28, 29, 30], 
+            "timestamps": list(range(30)) + [28, 29, 30],
             "values": [float(i) for i in range(33)],
         }
         r = client.post("/fit/sensor_1", json=payload)
@@ -88,6 +90,7 @@ class TestTrainPreflight:
 
     def test_nan_value_returns_422(self, client):
         import math
+
         payload = {
             "timestamps": list(range(50)),
             "values": [float(i) for i in range(49)] + [math.nan],

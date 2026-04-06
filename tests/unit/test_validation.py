@@ -32,13 +32,13 @@ class TestMinimumPoints:
         assert exc.value.rule == "minimum_points"
 
 
-
 class TestNoInvalidValues:
     def test_clean_data_passes(self):
         check_no_invalid_values([1.0, 2.0, 3.0])
 
     def test_nan_fails(self):
         import math
+
         with pytest.raises(ValidationError) as exc:
             check_no_invalid_values([1.0, math.nan, 3.0])
         assert exc.value.rule == "no_nan"

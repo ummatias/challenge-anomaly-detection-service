@@ -16,9 +16,11 @@ async def fit(
     Train (or retrain) an anomaly detection model for a series_id.
     Each call creates a new version of the model, and the latest version is used for inference.
 
-    The training process is thread-safe, allowing concurrent training and inference on the same series_id. 
+    The training process is thread-safe, allowing concurrent training and inference on the same series_id.
     """
     try:
         return await service.train(series_id, body)
     except ValidationError as e:
-        raise HTTPException(status_code=422, detail={"rule": e.rule, "detail": e.detail})
+        raise HTTPException(
+            status_code=422, detail={"rule": e.rule, "detail": e.detail}
+        )

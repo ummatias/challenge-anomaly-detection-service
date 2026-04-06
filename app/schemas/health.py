@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel
 
+
 class LatencyMetrics(BaseModel):
     avg: Optional[float] = None
     p95: Optional[float] = None

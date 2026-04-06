@@ -22,6 +22,7 @@ def isolated_storage(tmp_path, monkeypatch):
     monkeypatch.setenv("STORAGE_ROOT", str(tmp_path / "storage"))
     import importlib
     import app.core.persistence as p
+
     importlib.reload(p)
     yield
 
@@ -51,9 +52,11 @@ def make_train_payload():
         def test_foo(client, make_train_payload):
             r = client.post("/fit/s1", json=make_train_payload(n=100))
     """
+
     def _make(n: int = 50, multiplier: float = 1.0) -> dict:
         return {
             "timestamps": list(range(n)),
             "values": [float(i) * multiplier for i in range(n)],
         }
+
     return _make

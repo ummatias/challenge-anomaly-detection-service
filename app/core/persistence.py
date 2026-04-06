@@ -4,7 +4,7 @@ Persistence.
 Joblib save/load with path resolution.
 
 Storage layout:
-storage/                
+storage/
     <series_id>/                # one directory per series_id
         manifest.json           # version list + metadata / version
         v1/                     # one directory / version
@@ -27,9 +27,6 @@ STORAGE_ROOT = Path(os.getenv("STORAGE_ROOT", "storage"))
 
 
 def _series_dir(series_id: str) -> Path:
-    """
-        Resolve the full path and assert it stays inside STORAGE_ROOT.
-    """
     resolved = (STORAGE_ROOT / series_id).resolve()
     storage_root_resolved = STORAGE_ROOT.resolve()
     if not str(resolved).startswith(str(storage_root_resolved) + os.sep):
@@ -38,11 +35,14 @@ def _series_dir(series_id: str) -> Path:
         )
     return STORAGE_ROOT / series_id
 
+
 def _version_dir(series_id: str, version: str) -> Path:
     return _series_dir(series_id) / version
 
+
 def _manifest_path(series_id: str) -> Path:
     return _series_dir(series_id) / "manifest.json"
+
 
 def load_manifest(series_id: str) -> dict:
     path = _manifest_path(series_id)
@@ -51,11 +51,13 @@ def load_manifest(series_id: str) -> dict:
     with open(path) as f:
         return json.load(f)
 
+
 def save_manifest(series_id: str, manifest: dict) -> None:
     path = _manifest_path(series_id)
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         json.dump(manifest, f, indent=2)
+
 
 def save_model(series_id: str, version: str, params: ModelParams) -> None:
     vdir = _version_dir(series_id, version)
@@ -72,7 +74,10 @@ def load_model(series_id: str, version: str) -> ModelParams:
         )
     return joblib.load(path)
 
-def save_training_data(series_id: str, version: str, timestamps: list[int], values: list[float]) -> None:
+
+def save_training_data(
+    series_id: str, version: str, timestamps: list[int], values: list[float]
+) -> None:
     vdir = _version_dir(series_id, version)
     vdir.mkdir(parents=True, exist_ok=True)
     with open(vdir / "training_data.json", "w") as f:
@@ -89,8 +94,10 @@ def load_training_data(series_id: str, version: str) -> dict:
     with open(path) as f:
         return json.load(f)
 
+
 def series_exists(series_id: str) -> bool:
     return _manifest_path(series_id).exists()
+
 
 def list_series() -> list[str]:
     if not STORAGE_ROOT.exists():

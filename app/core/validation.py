@@ -29,8 +29,8 @@ def check_minimum_points(values: Sequence[float]) -> None:
         raise ValidationError(
             rule="minimum_points",
             detail=f"Need at least {MIN_POINTS} data points, got {len(values)}. "
-                   f"With fewer points, the sample std is unreliable as an estimator."
-                   f"Override with MIN_TRAIN_POINTS on .env",
+            f"With fewer points, the sample std is unreliable as an estimator."
+            f"Override with MIN_TRAIN_POINTS on .env",
         )
 
 
@@ -53,7 +53,7 @@ def check_non_constant(values: Sequence[float]) -> None:
         raise ValidationError(
             rule="non_constant",
             detail="All values are identical. std=0 means the model would flag "
-                   "every point above the mean as anomalous, which is meaningless.",
+            "every point above the mean as anomalous, which is meaningless.",
         )
 
 
@@ -63,14 +63,14 @@ def check_monotonic_timestamps(timestamps: Sequence[int]) -> None:
             raise ValidationError(
                 rule="monotonic_timestamps",
                 detail=f"Timestamp at index {i} ({timestamps[i]}) is not strictly "
-                       f"greater than previous ({timestamps[i - 1]}). "
-                       f"Timestamps must be strictly increasing (unix epoch, no duplicates).",
+                f"greater than previous ({timestamps[i - 1]}). "
+                f"Timestamps must be strictly increasing (unix epoch, no duplicates).",
             )
 
 
 def validate(timestamps: Sequence[int], values: Sequence[float]) -> None:
     """
-    Run all preflight checks. 
+    Run all preflight checks.
     Raises ValidationError on first failure.
     """
     check_minimum_points(values)

@@ -1,7 +1,11 @@
 """
 AnomalyDetectionModel: exactly as specified in the challenge.
 
-Limitation: the threshold is one-sided (upper only).
+Limitations:
+    - The threshold is one-sided (upper only).
+    - Time-series agnostic: it does not consider temporal patterns, only the distribution of values.
+    - Does not handle seasonality, drift, or concept shift.
+    - Can be evolved to incorporate incorporate time windows, seasonality, drift detection.
 """
 
 import numpy as np
@@ -36,7 +40,6 @@ class AnomalyDetectionModel:
         return value > self._params.mean + 3 * self._params.std
 
     def load_params(self, params: ModelParams) -> None:
-        #Restore a previously fitted model from persisted params.
         self._params = params
 
     @property
