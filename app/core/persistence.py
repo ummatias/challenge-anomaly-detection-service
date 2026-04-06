@@ -27,6 +27,15 @@ STORAGE_ROOT = Path(os.getenv("STORAGE_ROOT", "storage"))
 
 
 def _series_dir(series_id: str) -> Path:
+    """
+        Resolve the full path and assert it stays inside STORAGE_ROOT.
+    """
+    resolved = (STORAGE_ROOT / series_id).resolve()
+    storage_root_resolved = STORAGE_ROOT.resolve()
+    if not str(resolved).startswith(str(storage_root_resolved) + os.sep):
+        raise PermissionError(
+            f"series_id '{series_id}' resolves outside the storage root."
+        )
     return STORAGE_ROOT / series_id
 
 def _version_dir(series_id: str, version: str) -> Path:
